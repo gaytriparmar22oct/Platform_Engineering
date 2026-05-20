@@ -8,7 +8,7 @@ spec:
   project: default
   sources:
     # Chart (Helm)
-    - repoURL: REPO_URL
+    - repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git
       targetRevision: main
       path: Platform_Engineering/ecommerce-charts/catalog
       helm:
@@ -16,7 +16,7 @@ spec:
         valueFiles:
           - $values/Platform_Engineering/ecommerce-gitops/envs/dev/catalog/values.yaml
     # Values overlay (so the same chart can be reused across envs)
-    - repoURL: REPO_URL
+    - repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git
       targetRevision: main
       ref: values
   destination:

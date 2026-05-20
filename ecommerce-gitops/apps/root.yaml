@@ -9,7 +9,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: REPO_URL                # e.g. https://github.com/your-org/Platform_Engineering.git
+    repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git                # e.g. https://github.com/your-org/Platform_Engineering.git
     targetRevision: main
     path: Platform_Engineering/ecommerce-gitops/apps/dev
   destination:

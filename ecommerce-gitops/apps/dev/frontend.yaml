@@ -7,14 +7,14 @@ metadata:
 spec:
   project: default
   sources:
-    - repoURL: REPO_URL
+    - repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git
       targetRevision: main
       path: Platform_Engineering/ecommerce-charts/frontend
       helm:
         releaseName: frontend
         valueFiles:
           - $values/Platform_Engineering/ecommerce-gitops/envs/dev/frontend/values.yaml
-    - repoURL: REPO_URL
+    - repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git
       targetRevision: main
       ref: values
   destination:
