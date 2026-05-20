@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: frontend-dev
+  namespace: argocd
+  finalizers: [ "resources-finalizer.argocd.argoproj.io" ]
+spec:
+  project: default
+  sources:
+    - repoURL: REPO_URL
+      targetRevision: main
+      path: Platform_Engineering/ecommerce-charts/frontend
+      helm:
+        releaseName: frontend
+        valueFiles:
+          - $values/Platform_Engineering/ecommerce-gitops/envs/dev/frontend/values.yaml
+    - repoURL: REPO_URL
+      targetRevision: main
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ecommerce-dev
+  syncPolicy:
+    automated: { prune: true, selfHeal: true }
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

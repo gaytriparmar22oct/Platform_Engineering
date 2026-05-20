@@ -1,0 +1,106 @@
+# Default values consumed by the common library chart.
+# Service charts override these in their own values.yaml.
+
+# Core image config
+image:
+  repository: ""        # REQUIRED, e.g. acridpdev.azurecr.io/catalog
+  tag: "0.1.0"
+  pullPolicy: IfNotPresent
+imagePullSecrets: []
+
+# Naming
+nameOverride: ""
+fullnameOverride: ""
+
+# Workload
+replicaCount: 2
+revisionHistoryLimit: 5
+
+# Container
+containerPort: 8080
+env: []                  # list of {name, value} or {name, valueFrom}
+envFrom: []
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+# Probes (paths default to /healthz)
+livenessProbe:
+  enabled: true
+  path: /healthz
+  initialDelaySeconds: 10
+  periodSeconds: 10
+readinessProbe:
+  enabled: true
+  path: /healthz
+  initialDelaySeconds: 5
+  periodSeconds: 5
+
+# Service
+service:
+  type: ClusterIP
+  port: 80              # service port
+  # targetPort defaults to .Values.containerPort
+  annotations: {}
+
+# Pod scheduling
+nodeSelector:
+  workload: apps
+tolerations: []
+affinity: {}
+podAnnotations: {}
+podLabels: {}
+podSecurityContext:
+  runAsNonRoot: true
+  seccompProfile: { type: RuntimeDefault }
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities: { drop: ["ALL"] }
+  readOnlyRootFilesystem: false
+
+# Service account
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+# HPA
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 0   # 0 = disabled
+
+# kube-prometheus-stack ServiceMonitor
+metrics:
+  enabled: true
+  path: /metrics
+  port: http
+  interval: 30s
+  scrapeTimeout: 10s
+  # Selector label added to the ServiceMonitor; kube-prometheus-stack default
+  # release label is "prometheus-stack". Adjust to match your install.
+  release: prometheus-stack
+
+# Dapr sidecar
+dapr:
+  enabled: false
+  appId: ""             # defaults to release fullname
+  appPort: 0            # defaults to .Values.containerPort
+  appProtocol: http
+  config: ""            # name of Configuration CR (optional)
+  logLevel: info
+
+# Ingress (optional; off by default — front via gateway/ingress controller later)
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts: []
+  tls: []

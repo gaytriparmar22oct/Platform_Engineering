@@ -1,0 +1,92 @@
+# ============================================================================
+# Defaults inherited from the `common` library chart.
+# Library chart values are NOT auto-merged into parent charts, so we duplicate
+# the structural keys here. Override anything below per env in
+# ecommerce-gitops/envs/<env>/catalog/values.yaml.
+# ============================================================================
+image:
+  repository: "ecommerce/catalog"
+  tag: "0.1.0"
+  pullPolicy: IfNotPresent
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+replicaCount: 2
+revisionHistoryLimit: 5
+
+# --- catalog specifics ---
+containerPort: 8001
+
+env: []
+envFrom: []
+
+resources:
+  requests: { cpu: 100m, memory: 128Mi }
+  limits:   { cpu: 500m, memory: 512Mi }
+
+livenessProbe:
+  enabled: true
+  path: /healthz
+  initialDelaySeconds: 10
+  periodSeconds: 10
+readinessProbe:
+  enabled: true
+  path: /healthz
+  initialDelaySeconds: 5
+  periodSeconds: 5
+
+service:
+  type: ClusterIP
+  port: 80
+  annotations: {}
+
+nodeSelector:
+  workload: apps
+tolerations: []
+affinity: {}
+podAnnotations: {}
+podLabels: {}
+podSecurityContext:
+  runAsNonRoot: true
+  seccompProfile: { type: RuntimeDefault }
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities: { drop: ["ALL"] }
+  readOnlyRootFilesystem: false
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 0
+
+metrics:
+  enabled: true
+  path: /metrics
+  port: http
+  interval: 30s
+  scrapeTimeout: 10s
+  release: prometheus-stack
+
+dapr:
+  enabled: false
+  appId: ""
+  appPort: 8001
+  appProtocol: http
+  config: ""
+  logLevel: info
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts: []
+  tls: []

@@ -1,0 +1,11 @@
+image:
+  repository: acridpdev.azurecr.io/frontend
+  tag: "0.1.0"
+replicaCount: 2
+resources:
+  requests: { cpu: 100m, memory: 128Mi }
+  limits:   { cpu: 500m, memory: 256Mi }
+
+# Frontend exposes the UI; leave ingress off in dev until ingress controller installed.
+ingress:
+  enabled: false

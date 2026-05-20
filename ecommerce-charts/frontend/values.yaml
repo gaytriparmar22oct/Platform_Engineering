@@ -1,0 +1,95 @@
+# Inherits structural defaults from the `common` library chart.
+image:
+  repository: "ecommerce/frontend"
+  tag: "0.1.0"
+  pullPolicy: IfNotPresent
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+replicaCount: 2
+revisionHistoryLimit: 5
+
+# --- frontend specifics ---
+containerPort: 8080
+
+env:
+  - name: CATALOG_URL
+    value: "http://catalog:80"
+  - name: CART_URL
+    value: "http://cart:80"
+  - name: ORDERS_URL
+    value: "http://orders:80"
+envFrom: []
+
+resources:
+  requests: { cpu: 100m, memory: 128Mi }
+  limits:   { cpu: 500m, memory: 512Mi }
+
+livenessProbe:
+  enabled: true
+  path: /healthz
+  initialDelaySeconds: 10
+  periodSeconds: 10
+readinessProbe:
+  enabled: true
+  path: /healthz
+  initialDelaySeconds: 5
+  periodSeconds: 5
+
+service:
+  type: ClusterIP
+  port: 80
+  annotations: {}
+
+nodeSelector:
+  workload: apps
+tolerations: []
+affinity: {}
+podAnnotations: {}
+podLabels: {}
+podSecurityContext:
+  runAsNonRoot: true
+  seccompProfile: { type: RuntimeDefault }
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities: { drop: ["ALL"] }
+  readOnlyRootFilesystem: false
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 0
+
+metrics:
+  enabled: true
+  path: /metrics
+  port: http
+  interval: 30s
+  scrapeTimeout: 10s
+  release: prometheus-stack
+
+dapr:
+  enabled: false
+  appId: ""
+  appPort: 8080
+  appProtocol: http
+  config: ""
+  logLevel: info
+
+# frontend is the only service that gets exposed externally.
+# Off by default; enable + set hosts/tls in env overlay (e.g. envs/prod).
+ingress:
+  enabled: false
+  className: nginx
+  annotations: {}
+  hosts: []
+  tls: []

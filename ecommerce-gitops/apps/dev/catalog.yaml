@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: catalog-dev
+  namespace: argocd
+  finalizers: [ "resources-finalizer.argocd.argoproj.io" ]
+spec:
+  project: default
+  sources:
+    # Chart (Helm)
+    - repoURL: REPO_URL
+      targetRevision: main
+      path: Platform_Engineering/ecommerce-charts/catalog
+      helm:
+        releaseName: catalog
+        valueFiles:
+          - $values/Platform_Engineering/ecommerce-gitops/envs/dev/catalog/values.yaml
+    # Values overlay (so the same chart can be reused across envs)
+    - repoURL: REPO_URL
+      targetRevision: main
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ecommerce-dev
+  syncPolicy:
+    automated: { prune: true, selfHeal: true }
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
