@@ -9,11 +9,11 @@ spec:
   sources:
     - repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git
       targetRevision: main
-      path: Platform_Engineering/ecommerce-charts/frontend
+      path: ecommerce-charts/frontend
       helm:
         releaseName: frontend
         valueFiles:
-          - $values/Platform_Engineering/ecommerce-gitops/envs/dev/frontend/values.yaml
+          - $values/ecommerce-gitops/envs/dev/frontend/values.yaml
     - repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git
       targetRevision: main
       ref: values

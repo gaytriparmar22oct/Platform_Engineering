@@ -9,11 +9,11 @@ spec:
   sources:
     - repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git
       targetRevision: main
-      path: Platform_Engineering/ecommerce-charts/cart
+      path: ecommerce-charts/cart
       helm:
         releaseName: cart
         valueFiles:
-          - $values/Platform_Engineering/ecommerce-gitops/envs/dev/cart/values.yaml
+          - $values/ecommerce-gitops/envs/dev/cart/values.yaml
     - repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git
       targetRevision: main
       ref: values

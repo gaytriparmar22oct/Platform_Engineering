@@ -9,11 +9,11 @@ spec:
   sources:
     - repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git
       targetRevision: main
-      path: Platform_Engineering/ecommerce-charts/prime-service
+      path: ecommerce-charts/prime-service
       helm:
         releaseName: prime-service
         valueFiles:
-          - $values/Platform_Engineering/ecommerce-gitops/envs/dev/prime-service/values.yaml
+          - $values/ecommerce-gitops/envs/dev/prime-service/values.yaml
     - repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git
       targetRevision: main
       ref: values

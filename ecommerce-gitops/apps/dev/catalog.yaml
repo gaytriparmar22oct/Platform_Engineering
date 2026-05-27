@@ -10,11 +10,11 @@ spec:
     # Chart (Helm)
     - repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git
       targetRevision: main
-      path: Platform_Engineering/ecommerce-charts/catalog
+      path: ecommerce-charts/catalog
       helm:
         releaseName: catalog
         valueFiles:
-          - $values/Platform_Engineering/ecommerce-gitops/envs/dev/catalog/values.yaml
+          - $values/ecommerce-gitops/envs/dev/catalog/values.yaml
     # Values overlay (so the same chart can be reused across envs)
     - repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git
       targetRevision: main

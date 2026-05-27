@@ -11,7 +11,7 @@ spec:
   source:
     repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git                # e.g. https://github.com/your-org/Platform_Engineering.git
     targetRevision: main
-    path: Platform_Engineering/ecommerce-gitops/apps/dev
+    path: ecommerce-gitops/apps/dev
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
