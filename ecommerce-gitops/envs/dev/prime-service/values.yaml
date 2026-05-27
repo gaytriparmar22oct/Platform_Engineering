@@ -1,0 +1,17 @@
+image:
+  repository: gaytriparmar/prime-service
+  tag: "1.1"
+
+service:
+  type: LoadBalancer
+  port: 8010
+
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+    - host: prime.localtest.me
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []

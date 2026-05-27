@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>BrainBridge Shop</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 960px; margin: 2rem auto; padding: 0 1rem; }
+    h1 { border-bottom: 2px solid #444; padding-bottom: .25rem; }
+    h2 { margin-top: 2rem; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { padding: .5rem .75rem; border-bottom: 1px solid #ddd; text-align: left; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+    .card { border: 1px solid #ddd; border-radius: 8px; padding: 1rem; }
+    .price { color: #0a7; font-weight: 600; }
+    button { cursor: pointer; padding: .4rem .8rem; border-radius: 4px; border: 1px solid #444; background: #fff; }
+    button.primary { background: #0a7; color: #fff; border-color: #0a7; }
+    form { display: inline; }
+  </style>
+</head>
+<body>
+  <h1>🛒 BrainBridge Shop</h1>
+  <p>Signed in as <strong>{{ user }}</strong></p>
+
+  <h2>Products</h2>
+  <div class="grid">
+    {% for p in products %}
+    <div class="card">
+      <strong>{{ p.name }}</strong>
+      <div class="price">${{ p.price }}</div>
+      <small>stock: {{ p.stock }}</small><br>
+      <form action="/add" method="post">
+        <input type="hidden" name="product_id" value="{{ p.id }}">
+        <button type="submit">Add to cart</button>
+      </form>
+    </div>
+    {% endfor %}
+  </div>
+
+  <h2>Cart</h2>
+  {% if cart %}
+    <table>
+      <tr><th>Product</th><th>Qty</th></tr>
+      {% for pid, qty in cart.items() %}
+        <tr><td>{{ pid }}</td><td>{{ qty }}</td></tr>
+      {% endfor %}
+    </table>
+    <form action="/checkout" method="post">
+      <button class="primary" type="submit">Checkout</button>
+    </form>
+  {% else %}
+    <p>Cart is empty.</p>
+  {% endif %}
+
+  <h2>Past orders</h2>
+  {% if orders %}
+    <table>
+      <tr><th>Order</th><th>Placed</th><th>Items</th><th>Total</th></tr>
+      {% for o in orders %}
+        <tr>
+          <td>{{ o.order_id }}</td>
+          <td>{{ o.placed_at }}</td>
+          <td>{{ o['items'] | length }}</td>
+          <td>${{ o.total }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>No orders yet.</p>
+  {% endif %}
+</body>
+</html>

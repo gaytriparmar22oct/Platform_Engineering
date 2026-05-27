@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../../../../../../../BrainBridge"
+		},
+		{
+			"path": "../../../../../../AI_monitoring_agent"
+		},
+		{
+			"path": "../../../../.."
+		}
+	],
+	"settings": {}
+}

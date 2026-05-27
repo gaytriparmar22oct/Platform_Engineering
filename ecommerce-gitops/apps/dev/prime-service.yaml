@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prime-service-dev
+  namespace: argocd
+  finalizers: [ "resources-finalizer.argocd.argoproj.io" ]
+spec:
+  project: default
+  sources:
+    - repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git
+      targetRevision: main
+      path: Platform_Engineering/ecommerce-charts/prime-service
+      helm:
+        releaseName: prime-service
+        valueFiles:
+          - $values/Platform_Engineering/ecommerce-gitops/envs/dev/prime-service/values.yaml
+    - repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git
+      targetRevision: main
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: prime-service
+  syncPolicy:
+    automated: { prune: true, selfHeal: true }
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
