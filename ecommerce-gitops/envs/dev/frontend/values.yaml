@@ -7,6 +7,8 @@ resources:
   requests: { cpu: 100m, memory: 128Mi }
   limits:   { cpu: 500m, memory: 256Mi }
 nodeSelector: {}
+podSecurityContext:
+  runAsNonRoot: false
 
 # Frontend exposes the UI; leave ingress off in dev until ingress controller installed.
 ingress:
