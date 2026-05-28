@@ -1,7 +1,8 @@
 # dev overrides for catalog
 image:
-  repository: acridpdev.azurecr.io/catalog   # ACR set later by Terragrunt
+  repository: ecommerce/catalog
   tag: "0.1.0"                                # Kargo will bump this on promotion
+  pullPolicy: Never
 
 replicaCount: 2
 autoscaling:
@@ -10,3 +11,4 @@ autoscaling:
 resources:
   requests: { cpu: 100m, memory: 128Mi }
   limits:   { cpu: 500m, memory: 256Mi }
+nodeSelector: {}
