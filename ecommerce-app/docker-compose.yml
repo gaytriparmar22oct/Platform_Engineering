@@ -1,6 +1,8 @@
 services:
   catalog:
-    build: ./services/catalog
+    build:
+      context: ./services/catalog
+      dockerfile: Dockerfile.local
     image: ecommerce/catalog:0.1.0
     ports: ["8001:8001"]
     environment:
@@ -10,14 +12,18 @@ services:
       interval: 10s
 
   cart:
-    build: ./services/cart
+    build:
+      context: ./services/cart
+      dockerfile: Dockerfile.local
     image: ecommerce/cart:0.1.0
     ports: ["8002:8002"]
     environment:
       PORT: "8002"
 
   orders:
-    build: ./services/orders
+    build:
+      context: ./services/orders
+      dockerfile: Dockerfile.local
     image: ecommerce/orders:0.1.0
     ports: ["8003:8003"]
     environment:
@@ -27,7 +33,9 @@ services:
       - catalog
 
   frontend:
-    build: ./services/frontend
+    build:
+      context: ./services/frontend
+      dockerfile: Dockerfile.local
     image: ecommerce/frontend:0.1.0
     ports: ["8080:8080"]
     environment:
