@@ -2,7 +2,7 @@
 image:
   repository: ecommerce/catalog
   tag: "0.1.0"                                # Kargo will bump this on promotion
-  pullPolicy: Never
+  pullPolicy: IfNotPresent
 
 replicaCount: 2
 autoscaling:

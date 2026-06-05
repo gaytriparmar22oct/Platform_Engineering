@@ -1,7 +1,7 @@
 image:
   repository: ecommerce/orders
   tag: "0.1.0"
-  pullPolicy: Never
+  pullPolicy: IfNotPresent
 replicaCount: 2
 resources:
   requests: { cpu: 100m, memory: 128Mi }
