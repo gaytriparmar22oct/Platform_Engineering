@@ -9,3 +9,5 @@ resources:
 nodeSelector: {}
 podSecurityContext:
   runAsNonRoot: false
+metrics:
+  enabled: false
