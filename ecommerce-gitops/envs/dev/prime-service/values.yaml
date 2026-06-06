@@ -18,3 +18,9 @@ ingress:
 
 metrics:
   enabled: false
+
+podSecurityContext:
+  runAsNonRoot: false
+
+securityContext:
+  allowPrivilegeEscalation: false
