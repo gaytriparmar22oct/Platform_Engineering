@@ -11,3 +11,8 @@ podSecurityContext:
   runAsNonRoot: false
 metrics:
   enabled: false
+
+dapr:
+  enabled: true
+  appId: "cart"
+  appPort: 8002
