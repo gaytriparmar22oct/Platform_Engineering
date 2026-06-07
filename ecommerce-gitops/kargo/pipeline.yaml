@@ -1,0 +1,104 @@
+# Kargo Project — groups all stages for ecommerce promotion pipeline
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Project
+metadata:
+  name: ecommerce
+---
+# Warehouse — watches the git repo for changes to image tags in dev values files
+# When a new commit lands in main, Kargo creates a new "Freight" (bundle of artifacts)
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Warehouse
+metadata:
+  name: ecommerce-warehouse
+  namespace: ecommerce
+spec:
+  subscriptions:
+    - git:
+        repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git
+        branch: main
+        includePaths:
+          - ecommerce-gitops/envs/dev/**
+---
+# Stage: dev
+# First stop in the pipeline. Freight is auto-promoted here.
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Stage
+metadata:
+  name: dev
+  namespace: ecommerce
+spec:
+  requestedFreight:
+    - origin:
+        kind: Warehouse
+        name: ecommerce-warehouse
+      sources:
+        direct: true          # dev gets freight directly from warehouse
+  promotionTemplate:
+    spec:
+      steps:
+        - uses: argocd-update
+          config:
+            apps:
+              - name: cart-dev
+                namespace: argocd
+                sources:
+                  - repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git
+                    updateTargetRevision: true
+              - name: catalog-dev
+                namespace: argocd
+                sources:
+                  - repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git
+                    updateTargetRevision: true
+              - name: orders-dev
+                namespace: argocd
+                sources:
+                  - repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git
+                    updateTargetRevision: true
+              - name: frontend-dev
+                namespace: argocd
+                sources:
+                  - repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git
+                    updateTargetRevision: true
+---
+# Stage: staging
+# Second stop. Freight is promoted here only AFTER dev is healthy.
+# Requires manual approval (no autoPromotion) — you approve in Kargo UI.
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Stage
+metadata:
+  name: staging
+  namespace: ecommerce
+spec:
+  requestedFreight:
+    - origin:
+        kind: Warehouse
+        name: ecommerce-warehouse
+      sources:
+        stages:
+          - dev              # staging only gets freight that passed through dev first
+  promotionTemplate:
+    spec:
+      steps:
+        - uses: argocd-update
+          config:
+            apps:
+              - name: cart-staging
+                namespace: argocd
+                sources:
+                  - repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git
+                    updateTargetRevision: true
+              - name: catalog-staging
+                namespace: argocd
+                sources:
+                  - repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git
+                    updateTargetRevision: true
+              - name: orders-staging
+                namespace: argocd
+                sources:
+                  - repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git
+                    updateTargetRevision: true
+              - name: frontend-staging
+                namespace: argocd
+                sources:
+                  - repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git
+                    updateTargetRevision: true

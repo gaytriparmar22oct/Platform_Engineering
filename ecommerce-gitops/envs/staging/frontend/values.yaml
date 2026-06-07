@@ -1,0 +1,24 @@
+# Staging overrides for frontend
+image:
+  repository: ecommerce/frontend
+  tag: "0.1.0"
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+autoscaling:
+  enabled: false
+
+resources:
+  requests: { cpu: 100m, memory: 128Mi }
+  limits:   { cpu: 500m, memory: 256Mi }
+
+nodeSelector: {}
+podSecurityContext:
+  runAsNonRoot: false
+
+metrics:
+  enabled: false
+
+ingress:
+  enabled: false

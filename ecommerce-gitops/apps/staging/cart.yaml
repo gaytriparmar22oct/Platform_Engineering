@@ -1,26 +1,29 @@
-# Root "App of Apps". Watches apps/dev/ and apps/staging/ and materializes one Application per service.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: ecommerce-root
+  name: cart-staging
   namespace: argocd
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
+  finalizers: [ "resources-finalizer.argocd.argoproj.io" ]
+  labels:
+    kargo.akuity.io/stage: staging
 spec:
   project: default
   sources:
     - repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git
       targetRevision: main
-      path: ecommerce-gitops/apps/dev
+      path: ecommerce-charts/cart
+      helm:
+        releaseName: cart
+        valueFiles:
+          - $values/ecommerce-gitops/envs/staging/cart/values.yaml
     - repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git
       targetRevision: main
-      path: ecommerce-gitops/apps/staging
+      ref: values
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: ecommerce-staging
   syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+    automated: { prune: true, selfHeal: true }
     syncOptions:
       - CreateNamespace=true
+      - ServerSideApply=true

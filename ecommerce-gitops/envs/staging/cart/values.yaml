@@ -1,0 +1,23 @@
+# Staging overrides for cart
+image:
+  repository: ecommerce/cart
+  tag: "0.1.0"
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+resources:
+  requests: { cpu: 100m, memory: 128Mi }
+  limits:   { cpu: 500m, memory: 256Mi }
+
+nodeSelector: {}
+podSecurityContext:
+  runAsNonRoot: false
+
+metrics:
+  enabled: false
+
+dapr:
+  enabled: false
+  appId: "cart"
+  appPort: 8002
