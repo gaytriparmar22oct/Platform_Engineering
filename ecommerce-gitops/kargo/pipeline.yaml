@@ -16,8 +16,6 @@ spec:
     - git:
         repoURL: https://github.com/gaytriparmar22oct/Platform_Engineering.git
         branch: main
-        includePaths:
-          - ecommerce-gitops/envs/dev/**
 ---
 # Stage: dev
 # First stop in the pipeline. Freight is auto-promoted here.
