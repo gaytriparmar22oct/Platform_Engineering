@@ -4,19 +4,19 @@
 {{ include "common.deployment" . }}
 ---
 {{ include "common.service" . }}
----
 {{- $hpa := include "common.hpa" . -}}
-{{- if $hpa -}}
+{{- if $hpa }}
+---
 {{ $hpa }}
----
-{{ end -}}
+{{- end -}}
 {{- $sm := include "common.servicemonitor" . -}}
-{{- if $sm -}}
-{{ $sm }}
+{{- if $sm }}
 ---
-{{ end -}}
+{{ $sm }}
+{{- end -}}
 {{- $ing := include "common.ingress" . -}}
-{{- if $ing -}}
+{{- if $ing }}
+---
 {{ $ing }}
 {{- end -}}
 {{- end -}}

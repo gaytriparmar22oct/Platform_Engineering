@@ -3,6 +3,14 @@ apiVersion: kargo.akuity.io/v1alpha1
 kind: Project
 metadata:
   name: ecommerce
+spec:
+  promotionPolicies:
+    # Auto-promote new freight from Warehouse into dev immediately
+    - stage: dev
+      autoPromotionEnabled: true
+    # Auto-promote from dev into staging once dev reaches a Healthy state
+    - stage: staging
+      autoPromotionEnabled: true
 ---
 # Warehouse — watches the git repo for changes to image tags in dev values files
 # When a new commit lands in main, Kargo creates a new "Freight" (bundle of artifacts)
