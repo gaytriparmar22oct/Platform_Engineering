@@ -1,0 +1,26 @@
+# Registers Jaeger as a Grafana data source so traces are viewable inside
+# Grafana (alongside the existing Prometheus metrics).
+#
+# The kube-prometheus-stack Grafana runs a "grafana-sc-datasources" sidecar
+# that watches ConfigMaps labeled grafana_datasource=1 and hot-loads them —
+# no Grafana restart needed.
+#
+#   kubectl --context docker-desktop apply -f grafana-jaeger-datasource.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jaeger-grafana-datasource
+  namespace: monitoring
+  labels:
+    grafana_datasource: "1"
+data:
+  jaeger-datasource.yaml: |
+    apiVersion: 1
+    datasources:
+      - name: Jaeger
+        type: jaeger
+        uid: jaeger
+        access: proxy
+        # Grafana (monitoring ns) reaches Jaeger cross-namespace via its FQDN.
+        url: http://jaeger-query.ecommerce-dev.svc.cluster.local:16686
+        editable: true
