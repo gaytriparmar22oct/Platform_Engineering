@@ -15,4 +15,4 @@ nodeSelector: {}
 podSecurityContext:
   runAsNonRoot: false
 metrics:
-  enabled: false
+  enabled: true

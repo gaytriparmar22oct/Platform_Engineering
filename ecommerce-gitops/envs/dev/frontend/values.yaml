@@ -10,7 +10,7 @@ nodeSelector: {}
 podSecurityContext:
   runAsNonRoot: false
 metrics:
-  enabled: false
+  enabled: true
 
 # Frontend exposes the UI; leave ingress off in dev until ingress controller installed.
 ingress:
