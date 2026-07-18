@@ -19,7 +19,11 @@ revisionHistoryLimit: 5
 # --- catalog specifics ---
 containerPort: 8001
 
-env: []
+env:
+  - name: OTEL_SERVICE_NAME
+    value: "catalog"
+  - name: OTEL_EXPORTER_OTLP_ENDPOINT
+    value: "http://jaeger-collector:4317"
 envFrom: []
 
 resources:

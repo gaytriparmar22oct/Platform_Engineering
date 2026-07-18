@@ -18,6 +18,10 @@ containerPort: 8003
 env:
   - name: CATALOG_URL
     value: "http://catalog:80"
+  - name: OTEL_SERVICE_NAME
+    value: "orders"
+  - name: OTEL_EXPORTER_OTLP_ENDPOINT
+    value: "http://jaeger-collector:4317"
 envFrom: []
 
 resources:

@@ -7,6 +7,23 @@ import os
 app = FastAPI(title="cart")
 app.mount("/metrics", make_asgi_app())
 
+# --- OpenTelemetry distributed tracing ---
+# Active only when OTEL_EXPORTER_OTLP_ENDPOINT is set (e.g. in Kubernetes), so
+# local `docker compose up` without a Jaeger backend keeps working unchanged.
+if os.environ.get("OTEL_EXPORTER_OTLP_ENDPOINT"):
+    from opentelemetry import trace
+    from opentelemetry.sdk.resources import Resource
+    from opentelemetry.sdk.trace import TracerProvider
+    from opentelemetry.sdk.trace.export import BatchSpanProcessor
+    from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+    from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+
+    _resource = Resource.create({"service.name": os.environ.get("OTEL_SERVICE_NAME", app.title)})
+    _provider = TracerProvider(resource=_resource)
+    _provider.add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
+    trace.set_tracer_provider(_provider)
+    FastAPIInstrumentor.instrument_app(app)
+
 REQUESTS = Counter("cart_requests_total", "Total cart requests", ["endpoint"])
 
 # user_id -> { product_id: qty }

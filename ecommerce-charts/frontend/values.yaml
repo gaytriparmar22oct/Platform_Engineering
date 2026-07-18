@@ -21,6 +21,10 @@ env:
     value: "http://cart:80"
   - name: ORDERS_URL
     value: "http://orders:80"
+  - name: OTEL_SERVICE_NAME
+    value: "frontend"
+  - name: OTEL_EXPORTER_OTLP_ENDPOINT
+    value: "http://jaeger-collector:4317"
 envFrom: []
 
 resources:

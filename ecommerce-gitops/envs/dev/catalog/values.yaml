@@ -1,7 +1,7 @@
 # dev overrides for catalog
 image:
   repository: ecommerce/catalog
-  tag: "0.1.0"                                # Kargo will bump this on promotion
+  tag: "0.2.0"                                # Kargo will bump this on promotion
   pullPolicy: IfNotPresent
 
 replicaCount: 2

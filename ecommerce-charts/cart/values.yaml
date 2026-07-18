@@ -14,7 +14,11 @@ revisionHistoryLimit: 5
 # --- cart specifics ---
 containerPort: 8002
 
-env: []
+env:
+  - name: OTEL_SERVICE_NAME
+    value: "cart"
+  - name: OTEL_EXPORTER_OTLP_ENDPOINT
+    value: "http://jaeger-collector:4317"
 envFrom: []
 
 resources:
