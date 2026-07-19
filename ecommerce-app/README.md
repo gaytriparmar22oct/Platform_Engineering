@@ -40,12 +40,57 @@ docker build -t ecommerce/frontend:0.1.0 services/frontend
 ecommerce-app/
 ├── docker-compose.yml
 ├── README.md
+├── observability/
+│   ├── jaeger.yaml                    (Jaeger all-in-one for ecommerce-dev)
+│   └── grafana-jaeger-datasource.yaml (registers Jaeger in Grafana)
 └── services/
     ├── frontend/   (main.py, templates/, Dockerfile, requirements.txt)
     ├── catalog/
     ├── cart/
     └── orders/
 ```
+
+## Observability — distributed tracing (Jaeger)
+
+All four services are instrumented with **OpenTelemetry** (auto-instrumentation
+for FastAPI + httpx). Trace context propagates between services over HTTP, so a
+single request (e.g. checkout) produces one end-to-end trace spanning
+`frontend → cart / orders → catalog`.
+
+Tracing activates only when `OTEL_EXPORTER_OTLP_ENDPOINT` is set (wired via the
+Helm charts in Kubernetes), so local `docker compose up` without a Jaeger
+backend keeps working unchanged.
+
+**Components (running on docker-desktop):**
+
+| Component | Namespace | Purpose |
+|---|---|---|
+| Jaeger all-in-one | `ecommerce-dev` | OTLP collector + in-memory storage + query UI |
+| Grafana | `monitoring` | Dashboards; Jaeger added as a data source |
+| Prometheus | `monitoring` | Scrapes `/metrics` from each service |
+
+**Deploy Jaeger:**
+
+```powershell
+kubectl --context docker-desktop apply -f observability/jaeger.yaml
+kubectl --context docker-desktop apply -f observability/grafana-jaeger-datasource.yaml
+```
+
+**Access the UIs from your machine (port-forward):**
+
+```powershell
+# Jaeger UI  -> http://localhost:16686
+kubectl --context docker-desktop -n ecommerce-dev port-forward svc/jaeger-query 16686:16686
+
+# Grafana    -> http://localhost:3000  (user: admin)
+kubectl --context docker-desktop -n monitoring port-forward svc/prometheus-stack-grafana 3000:80
+```
+
+In Jaeger: pick a service (e.g. `frontend`) → **Find Traces**.
+In Grafana: **Explore** → select the **Jaeger** data source → search traces.
+
+> The Jaeger backend uses in-memory storage — traces are lost on pod restart.
+> Fine for local/dev; use the Jaeger Operator + Elasticsearch/Cassandra for prod.
 
 ## Next steps (planned)
 
